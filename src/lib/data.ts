@@ -1,13 +1,18 @@
 import { prisma } from "./prisma";
+import { ensureDBInitialized } from "./db-init";
 import type {
   OrganizationData,
   StudentData,
-  PaintingData,
   StudentWithPaintings,
   GalleryStyle,
 } from "./types";
 
+async function ensureReady() {
+  await ensureDBInitialized();
+}
+
 export async function getOrganization(): Promise<OrganizationData | null> {
+  await ensureReady();
   const org = await prisma.organization.findFirst();
   if (!org) return null;
   return {
@@ -22,10 +27,9 @@ export async function getOrganization(): Promise<OrganizationData | null> {
 export async function getAllStudents(): Promise<
   (StudentData & { paintingCount: number; coverImage: string | null })[]
 > {
+  await ensureReady();
   const students = await prisma.student.findMany({
-    include: {
-      paintings: { orderBy: { order: "asc" } },
-    },
+    include: { paintings: { orderBy: { order: "asc" } } },
     orderBy: { createdAt: "asc" },
   });
   return students.map((s) => ({
@@ -44,6 +48,7 @@ export async function getAllStudents(): Promise<
 export async function getStudentWithPaintings(
   studentId: string
 ): Promise<StudentWithPaintings | null> {
+  await ensureReady();
   const s = await prisma.student.findUnique({
     where: { id: studentId },
     include: { paintings: { orderBy: { order: "asc" } } },

@@ -2,6 +2,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getAllStudents, getOrganization } from "@/lib/data";
 
+// 运行时动态渲染（不预构建，因为数据库可能在运行时才有数据）
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "星辰美术 · 学生线上画展",
   description: "360° VR 沉浸式学生作品展示 · 点击进入学生专属展厅",

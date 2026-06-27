@@ -4,6 +4,9 @@ import { getStudentWithPaintings, getOrganization } from "@/lib/data";
 import { effectiveStyle } from "@/lib/types";
 import GalleryClient from "@/components/gallery/GalleryClient";
 
+// 运行时动态渲染
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{ studentId: string }>;
 }
