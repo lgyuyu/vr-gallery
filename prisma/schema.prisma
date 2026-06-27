@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  logo      String?
+  subtitle  String   @default("学生画展")
+  style     String   @default("modern") // "modern" | "cozy"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  students  Student[]
+}
+
+model Student {
+  id        String   @id @default(cuid())
+  name      String
+  age       String?
+  className String?
+  bio       String?
+  style     String?  // null = 用机构默认风格
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  paintings Painting[]
+}
+
+model Painting {
+  id           String   @id @default(cuid())
+  title        String?
+  description  String?
+  createdAt    String?
+  imageUrl     String
+  thumbnailUrl String?
+  order        Int      @default(0)
+  studentId    String
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  uploadedAt   DateTime @default(now())
+}

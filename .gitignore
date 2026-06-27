@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# database (本地开发文件，不提交)
+*.db
+*.db-journal
+dev.db
+
