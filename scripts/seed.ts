@@ -1,9 +1,11 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-import path from "node:path";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 
-const dbPath = path.join(process.cwd(), "dev.db");
-const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
+const url = process.env.DATABASE_URL ?? "file:./dev.db";
+const adapter = new PrismaLibSql({
+  url,
+  authToken: process.env.DATABASE_AUTH_TOKEN ?? undefined,
+});
 const prisma = new PrismaClient({ adapter });
 
 // 占位画作的SVG生成器 - 创建抽象艺术风格的占位图
